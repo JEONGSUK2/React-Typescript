@@ -12,6 +12,7 @@ interface ThemeColor {
     hover: string;
     active: string;
     text: string;
+    outline: string;
   }
 }
 
@@ -41,19 +42,22 @@ const themeColor :ThemeColor = {
     "back" : "bg-indigo-500",         //  배경색 색상 지정
     "hover": "hover:bg-indigo-500",   // hover시 변경될 색상
     "active": "bg-indigo-400" ,       // active시 색상 변경
-    "text" : "text-indigo-500"        // 글자색 변경
+    "text" : "text-indigo-500",        // 글자색 변경
+    "outline": "outline-indigo-300"
   },
   "orange":{
     "back" : "bg-orange-500",
     "hover": "hover:bg-orange-500",
     "active": "bg-orange-400",
-    "text" : "text-orange-500"
+    "text" : "text-orange-500",
+    "outline": "outline-orange-300"
   },
   "blue":{
     "back" : "bg-blue-500",
     "hover": "hover:bg-blue-500",
     "active": "bg-blue-400",
-    "text" : "text-blue-500"
+    "text" : "text-blue-500",
+    "outline": "outline-blue-300"
   }
 }
 
@@ -110,13 +114,14 @@ const selectCode =(BtnNumber: number, code: string, name: string)=>{
           }
         </div>
      </div>
+     <div className="w-4/5 md:w-3/5 xl:4/12 mx-auto my-40 flex rounded items-center pt-2 flex-wrap">
     <div className="border-b basis-full py-2 px-2 flex justify-center items-center text-sm">
       <span className="basis-[30%] text-center mr-5">국내 / 국외 선택</span>
       <button className={`text-sm border p-1 px-5 rounded hover:text-white mr-4 ${isBtn === 1 ? 'text-white' : 'text-black'} ${themeColor[theme].hover} ${isBtn === 1 && themeColor[theme].active} : ''`} onClick={()=> selectCode(1, '04', 'CJ대한통운')}>국내</button>
       <button className={`text-sm border p-1 px-5 rounded hover:text-white mr-4 ${isBtn === 2 ? 'text-white' : 'text-black'} ${themeColor[theme].hover} ${isBtn === 2 && themeColor[theme].active} : ''`} onClick={()=> selectCode(2, '12', 'EMS')}>국외</button>
     </div>  
     
-    <select value={tcode} onChange={(event)=>{     
+      <select value={tcode} onChange={(event)=>{     
         setTcode(event.target.value);
     }}>
         {
@@ -129,7 +134,11 @@ const selectCode =(BtnNumber: number, code: string, name: string)=>{
             )
           })
         }
-    </select>
+      </select>
+      <div className="basis-full py-4 border-b text-center">
+        <input type="text" className="w-[80%] border px-5 py-2 rounded-md outline-indigo-300 " />
+      </div>
+    </div>
     </>
   );
 }
