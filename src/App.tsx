@@ -14,27 +14,27 @@ interface TrackingDetail {
   remark: string | null;
   //code - string or null / remark - string or null
 }
-interface PackageData{
-  "adUrl": string,
-  "complete": boolean,
-  "invoiceNo": string,
-  "itemImage": string,
-  "itemName": string,
-  "level": number,
-  "receiverAddr": string,
-  "receiverName": string,
-  "recipient": string,
-  "result": string,
-  "senderName": string,
-  "trackingDetails": TrackingDetail[],
-  "orderNumber": string | null,
-  "estimate": string | null,
-  "productInfo": string | null,
-  "zipCode": string | null,
-  "lastDetail":TrackingDetail,
-  "lastStateDetail":TrackingDetail,
-  "firstDetail":TrackingDetail,
-  "completeYN": ""
+interface PackageData {
+  adUrl: string;
+  complete: boolean;
+  invoiceNo: string;
+  itemImage: string;
+  itemName: string;
+  level: number;
+  receiverAddr: string;
+  receiverName: string;
+  recipient: string;
+  result: string;
+  senderName: string;
+  trackingDetails: TrackingDetail[];
+  orderNumber: string | null;
+  estimate: string | null;
+  productInfo: string | null;
+  zipCode: string | null;
+  lastDetail: TrackingDetail;
+  lastStateDetail: TrackingDetail;
+  firstDetail: TrackingDetail;
+  completeYN: "";
 }
 
 /*
@@ -257,7 +257,6 @@ interface ButtonType {
   theme: string;
 }
 
-
 function App() {
   const [allCarriers, setAllCarriers] = useState<Company[]>([]);
   // 가져온 택배 데이터를 전부 복사해서 넣음 (나중에 이 배열이 필터 될 예정)
@@ -276,14 +275,12 @@ function App() {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-
-  const [Mmenu , setMmenu] = useState<boolean>(false);
+  const [Mmenu, setMmenu] = useState<boolean>(false);
 
   const toggleMenu = () => {
-    setMmenu(!Mmenu)
-}
+    setMmenu(!Mmenu);
+  };
 
-  
   const themeColor: ThemeColor = {
     default: {
       back: "bg-indigo-500",
@@ -329,20 +326,16 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          `http://info.sweettracker.co.kr/api/v1/companylist?t_key=${process.env.REACT_APP_API_KEY}`
-        );
+        const res = await fetch(`http://info.sweettracker.co.kr/api/v1/companylist?t_key=${process.env.REACT_APP_API_KEY}`);
         const data = await res.json();
         setAllCarriers(data.Company);
         setCarriers(data.Company);
         setIsLoading(false);
-        
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-    
   }, []);
 
   const selectCode = (BtnNumber: number, code: string, name: string) => {
@@ -358,19 +351,19 @@ function App() {
 
   const blindNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const result = carriers.find((e)=> e.Code === tcode)
-    if(result){
-      if(result.International === "false"){
+    const result = carriers.find((e) => e.Code === tcode);
+    if (result) {
+      if (result.International === "false") {
         e.target.value = e.target.value.replace(/[^0-9]/g, ``);
       }
     }
-  
+
     setTinvoice(value);
   };
 
   const PostSubmit = async () => {
     setIsLoading(true);
-    setIsShow(false)
+    setIsShow(false);
     setError(""); //에러를 초기화한다.
     // fetch 문을 사용할 것 같으면 아래 코드가 필요, 아닌 경우 searchParams 쓴 코드 쓰면 됨.
     // const url = new URL(`http://info.sweettracker.co.kr/api/v1/trackingInfo?t_code=${tcode}&t_invoice=${tinvoice}&t_key=${process.env.REACT_APP_API_KEY}`)
@@ -385,15 +378,14 @@ function App() {
         `https://info.sweettracker.co.kr/api/v1/trackingInfo?t_code=${tcode}&t_invoice=${tinvoice}&t_key=${process.env.REACT_APP_API_KEY}`
       );
       const data = await res.json();
-      if(data.firstDetail === null){
+      if (data.firstDetail === null) {
         setError("데이터없음");
         setIsLoading(false);
         return;
-      } 
-      if (data.code === "104" || data.code === '105') {
+      }
+      if (data.code === "104" || data.code === "105") {
         setError(data.msg);
       } else {
-      
         setInfoTracking(data);
         setIsShow(true);
       }
@@ -405,12 +397,17 @@ function App() {
     }
   };
 
-const PostListName :string[] = ["상품인수", "상품이동중", "배송지도착", "배송출발", "배송완료"];
+  const PostListName: string[] = [
+    "상품인수",
+    "상품이동중",
+    "배송지도착",
+    "배송출발",
+    "배송완료",
+  ];
 
   return (
     <>
-      {
-      isLoading && (
+      {isLoading && (
         <div className="fixed w-full h-full bg-black/50 top-0 left-0 z-50">
           <div className="absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4">
             <svg
@@ -662,49 +659,66 @@ const PostListName :string[] = ["상품인수", "상품이동중", "배송지도
             </svg>
           </div>
         </div>
-      )
-      }
+      )}
 
-      <div className={`${themeColor[theme].back} p-5 text-black text-sm md:text-xl xl:text-2xl flex justify-between`}>
+      <div
+        className={`${themeColor[theme].back} p-5 text-black text-sm md:text-xl xl:text-2xl flex justify-between`}
+      >
         <h3 className="font-extrabold text-white">국내.외 택배조회 시스템</h3>
         <div className="hidden md:block">
           <span className="text-white">테마 :</span>
-          {
-          buttons.map((e, i) => {
-            return (
-              <button 
-              onClick={() => {
-                  setTheme(e.theme);
-                }}
-                className="mx-1 md:mx-2 xl:mx-3 text-white"
-                key={i}
-                >
-                {e.name}
-              </button>
-            );
-          })
-          }
-        </div>
-      </div>
-      {/* setTheme(e.theme); */}
-      <div className="fixed right-5 top-5 transition-all duration-500 z-[51] cursor-pointer md:hidden" onClick={()=>{toggleMenu()} }>
-            <div className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${Mmenu && 'rotate-45 translate-y-[10px]' }` }></div>
-            <div className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${Mmenu && 'opacity-0 -translate-x-8 rotate-[360deg]' }`}></div>
-            <div className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${Mmenu && '-rotate-45 -translate-y-[10px]'}`}></div>
-        </div>
-
-        <div className={`w-72 h-full fixed -right-72 top-0  z-50 p-12 box-border transition-all duration-500   md:hidden  ${Mmenu ? `right-[0px] ${themeColor[theme].back}` :''}`}>
-           <div className="text-center mt-6 ">
-       
-           </div>
-           <ul className="mt-12 flex flex-col h-full  ">   
-           {
-          buttons.map((e, i) => {
+          {buttons.map((e, i) => {
             return (
               <button
                 onClick={() => {
                   setTheme(e.theme);
-                  toggleMenu()
+                }}
+                className="mx-1 md:mx-2 xl:mx-3 text-white"
+                key={i}
+              >
+                {e.name}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      {/* setTheme(e.theme); */}
+      <div
+        className="fixed right-5 top-5 transition-all duration-500 z-[51] cursor-pointer md:hidden"
+        onClick={() => {
+          toggleMenu();
+        }}
+      >
+        <div
+          className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${
+            Mmenu && "rotate-45 translate-y-[10px]"
+          }`}
+        ></div>
+        <div
+          className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${
+            Mmenu && "opacity-0 -translate-x-8 rotate-[360deg]"
+          }`}
+        ></div>
+        <div
+          className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${
+            Mmenu && "-rotate-45 -translate-y-[10px]"
+          }`}
+        ></div>
+      </div>
+
+      <div
+        className={`w-72 h-full fixed -right-72 top-0  z-50 p-12 box-border transition-all duration-500   md:hidden  ${
+          Mmenu ? `right-[0px] ${themeColor[theme].back}` : ""
+        }`}
+      >
+        <div className="text-center mt-6 "></div>
+        <ul className="mt-12 flex flex-col h-full  ">
+          {buttons.map((e, i) => {
+            return (
+              <button
+                onClick={() => {
+                  setTheme(e.theme);
+                  toggleMenu();
                 }}
                 className="mx-1 md:mx-2 xl:mx-3 p-[25px] text-xl border-b  border-white text-white"
                 key={i}
@@ -712,10 +726,9 @@ const PostListName :string[] = ["상품인수", "상품이동중", "배송지도
                 {e.name}
               </button>
             );
-          })
-          }
-            </ul>
-        </div>
+          })}
+        </ul>
+      </div>
 
       <div className="w-4/5 md:w-3/5 xl:w-4/12 mx-auto my-40 flex rounded items-center pt-2 flex-wrap">
         <div className="border-b basis-full py-2 px-2 flex justify-center items-center text-sm">
@@ -745,25 +758,24 @@ const PostListName :string[] = ["상품인수", "상품이동중", "배송지도
         <div className="basis-full">
           <select
             className="w-full border mt-4 py-2 px-4 rounded-md "
-            value={tcode} onChange={(e)=>{
+            value={tcode}
+            onChange={(e) => {
               const result_code = e.target.value;
               setTcode(e.target.value);
-              const result = carriers.find((e)=> e.Code === result_code);
-              if(result){
+              const result = carriers.find((e) => e.Code === result_code);
+              if (result) {
                 setTname(result.Name);
               }
             }}
           >
-            {
-            carriers &&
+            {carriers &&
               carriers.map((e, i) => {
                 return (
                   <option key={i} value={e.Code}>
                     {e.Name}
                   </option>
                 );
-              })
-            }
+              })}
           </select>
         </div>
         <div className="basis-full mt-4 py-4 border-b text-center">
@@ -782,8 +794,7 @@ const PostListName :string[] = ["상품인수", "상품이동중", "배송지도
             조회하기
           </button>
         </div>
-        {
-        error && (
+        {error && (
           <div className="basis-full text-center py-4 border-b">
             <span className={`${themeColor[theme].text} font-bold`}>
               {error}
@@ -791,53 +802,86 @@ const PostListName :string[] = ["상품인수", "상품이동중", "배송지도
           </div>
         )}
       </div>
-      {
-        isShow && 
-        <> 
-        <div className="w-full">
-          <div className={`${themeColor[theme].back} text-white flex justify-center py-10 px-5 flex-wrap items-center text-center`}>
-            <span className="text-xl basis-[45%] font-bold mr-5 mb-5">운송장 번호</span>
-            <h3 className="text-2xl basis-[45%] font-bold mb-5">{tinvoice}</h3>
-            <span className="text-xl basis-[45%] font-bold mr-5 mb-5">택배사</span>
-            <h3 className="text-2xl basis-[45%] font-bold mb-5"> {tname}</h3>
+      {isShow && (
+        <>
+          <div className="w-full">
+            <div
+              className={`${themeColor[theme].back} text-white flex justify-center py-10 px-5 flex-wrap items-center text-center`}
+            >
+              <span className="text-xl basis-[45%] font-bold mr-5 mb-5">
+                운송장 번호
+              </span>
+              <h3 className="text-2xl basis-[45%] font-bold mb-5">
+                {tinvoice}
+              </h3>
+              <span className="text-xl basis-[45%] font-bold mr-5 mb-5">
+                택배사
+              </span>
+              <h3 className="text-2xl basis-[45%] font-bold mb-5"> {tname}</h3>
+            </div>
           </div>
-        </div>
-          <div className="bg-white my-5 flex justify-around py-5 relative before:bg-[#e2e5e8] before:h-[1px] before:box-border
-          before:top-[45%] before:absolute before:left-[10%] before:w-4/5 before:z-0"> 
-          {
-            Array(5).fill('').map((_,i)=>{
-              const resultLevel = infoTracking && i + 1 === (infoTracking ?.level - 1);
-              return(
-                <div key={i} className={`${ infoTracking && resultLevel ? themeColor[theme].after: 'after:bg-gray-200'} relative z-10 after:absolute after:w-[60px] after:h-[60px] after:rounded-full after:left-0 after:top-0`}>
-                  <img 
-                  className="relative z-10"
-                  src={`images/ic_sky_delivery_step${i+1}_on.png`} alt={PostListName[i]} />
-                  <p className="text-center text-xs mt-1">{PostListName[i]}</p>
-                </div>
-              ) 
-            })
-          }
-          {/* 레벨의 글자 > 테마의 색상 + 글자  */}
+          <div
+            className="bg-white my-5 flex justify-around py-5 relative before:bg-[#e2e5e8] before:h-[1px] before:box-border
+          before:top-[45%] before:absolute before:left-[10%] before:w-4/5 before:z-0"
+          >
+            {Array(5)
+              .fill("")
+              .map((_, i) => {
+                const resultLevel =
+                  infoTracking && i + 1 === infoTracking?.level - 1;
+                return (
+                  <div
+                    key={i}
+                    className={`${
+                      infoTracking && resultLevel
+                        ? themeColor[theme].after
+                        : "after:bg-gray-200"
+                    } relative z-10 after:absolute after:w-[60px] after:h-[60px] after:rounded-full after:left-0 after:top-0`}
+                  >
+                    <img
+                      className="relative z-10"
+                      src={`images/ic_sky_delivery_step${i + 1}_on.png`}
+                      alt={PostListName[i]}
+                    />
+                    <p className="text-center text-xs mt-1">
+                      {PostListName[i]}
+                    </p>
+                  </div>
+                );
+              })}
+            {/* 레벨의 글자 > 테마의 색상 + 글자  */}
           </div>
           <div className="bg-white py-5">
-            {
-              infoTracking && infoTracking.trackingDetails.slice().reverse().map((e,i)=>{
-                return(
-                <div className={`pl-20 py-5 relative group ${themeColor[theme].odd}`} key={i}>
-                  <div className={`${ i === 0 ? `${themeColor[theme].back} ${themeColor[theme].border}` : 'bg-black'}
-                   bg-white relative border-2 rounded-full w-2 h-2 -left-[30px] top-10 z-30`}></div>
-                  <p>{e.where}</p>
-                  <p>{e.telno}</p>
-                  <p>{e.timeString}</p>
-                  <div className={`group-last:h-0 h-full absolute w-0.5 left-[53px] top-[60px] z-20 ${themeColor[theme].back}`}></div>
-                </div>
-                )
-              })
-            }
-          </div>
+            {infoTracking &&
+              infoTracking.trackingDetails
+                .slice()
+                .reverse()
+                .map((e, i) => {
+                  return (
+                    <div
+                      className={`pl-20 py-5 relative group ${themeColor[theme].odd}`}
+                      key={i}
+                    >
+                      <div
+                        className={`${
+                          i === 0
+                            ? `${themeColor[theme].back} ${themeColor[theme].border}`
+                            : "bg-black"
+                        }
+                   bg-white relative border-2 rounded-full w-2 h-2 -left-[30px] top-10 z-30`}
+                      ></div>
+                      <p>{e.where}</p>
+                      <p>{e.telno}</p>
+                      <p>{e.timeString}</p>
+                      <div
+                        className={`group-last:h-0 h-full absolute w-0.5 left-[53px] top-[60px] z-20 ${themeColor[theme].back}`}
+                      ></div>
+                    </div>
+                  );
+                })}         </div>
         </>
-      }
-    </>
+      )}
+   </>
   );
 }
 
