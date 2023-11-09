@@ -374,9 +374,7 @@ function App() {
     // url.searchParams.append("t_key", `${process.env.REACT_APP_API_KEY}`)
 
     try {
-      const res = await fetch(
-        `https://info.sweettracker.co.kr/api/v1/trackingInfo?t_code=${tcode}&t_invoice=${tinvoice}&t_key=${process.env.REACT_APP_API_KEY}`
-      );
+      const res = await fetch(`https://info.sweettracker.co.kr/api/v1/trackingInfo?t_code=${tcode}&t_invoice=${tinvoice}&t_key=${process.env.REACT_APP_API_KEY}`);
       const data = await res.json();
       if (data.firstDetail === null) {
         setError("데이터없음");
@@ -673,7 +671,7 @@ function App() {
                 onClick={() => {
                   setTheme(e.theme);
                 }}
-                className="mx-1 md:mx-2 xl:mx-4 text-white"
+                className="mx-1 md:mx-2 xl:mx-3 text-white"
                 key={i}
               >
                 {e.name}
@@ -878,7 +876,8 @@ function App() {
                       ></div>
                     </div>
                   );
-                })}         </div>
+                })}         
+            </div>
         </>
       )}
    </>
