@@ -277,6 +277,13 @@ function App() {
   const [error, setError] = useState<string>("");
 
 
+  const [Mmenu , setMmenu] = useState<boolean>(false);
+
+  const toggleMenu = () => {
+    setMmenu(!Mmenu)
+}
+
+  
   const themeColor: ThemeColor = {
     default: {
       back: "bg-indigo-500",
@@ -329,11 +336,13 @@ function App() {
         setAllCarriers(data.Company);
         setCarriers(data.Company);
         setIsLoading(false);
+        
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
+    
   }, []);
 
   const selectCode = (BtnNumber: number, code: string, name: string) => {
@@ -356,7 +365,6 @@ function App() {
       }
     }
   
-
     setTinvoice(value);
   };
 
@@ -397,12 +405,12 @@ function App() {
     }
   };
 
-  const PostListName :string[] = ["상품인수", "상품이동중", "배송지도착", "배송출발", "배송완료"];
-
+const PostListName :string[] = ["상품인수", "상품이동중", "배송지도착", "배송출발", "배송완료"];
 
   return (
     <>
-      {isLoading && (
+      {
+      isLoading && (
         <div className="fixed w-full h-full bg-black/50 top-0 left-0 z-50">
           <div className="absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4">
             <svg
@@ -654,29 +662,61 @@ function App() {
             </svg>
           </div>
         </div>
-      )}
+      )
+      }
 
-      <div
-        className={`${themeColor[theme].back} p-5 text-black text-sm md:text-xl xl:text-2xl flex justify-between`}
-      >
+      <div className={`${themeColor[theme].back} p-5 text-black text-sm md:text-xl xl:text-2xl flex justify-between`}>
         <h3 className="font-extrabold text-white">국내.외 택배조회 시스템</h3>
-        <div>
-          <span className="text-white">테마 : </span>
-          {buttons.map((e, i) => {
+        <div className="hidden md:block">
+          <span className="text-white">테마 :</span>
+          {
+          buttons.map((e, i) => {
+            return (
+              <button 
+              onClick={() => {
+                  setTheme(e.theme);
+                }}
+                className="mx-1 md:mx-2 xl:mx-3 text-white"
+                key={i}
+                >
+                {e.name}
+              </button>
+            );
+          })
+          }
+        </div>
+      </div>
+      {/* setTheme(e.theme); */}
+      <div className="fixed right-5 top-5 transition-all duration-500 z-[51] cursor-pointer md:hidden" onClick={()=>{toggleMenu()} }>
+            <div className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${Mmenu && 'rotate-45 translate-y-[10px]' }` }></div>
+            <div className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${Mmenu && 'opacity-0 -translate-x-8 rotate-[360deg]' }`}></div>
+            <div className={`w-[45px] h-[5px] bg-black rounded m-[5px] transition-all duration-500  ${Mmenu && '-rotate-45 -translate-y-[10px]'}`}></div>
+        </div>
+
+        <div className={`w-72 h-full fixed -right-72 top-0  z-50 p-12 box-border transition-all duration-500   md:hidden  ${Mmenu ? `right-[0px] ${themeColor[theme].back}` :''}`}>
+           <div className="text-center mt-6 ">
+       
+           </div>
+           <ul className="mt-12 flex flex-col h-full  ">   
+           {
+          buttons.map((e, i) => {
             return (
               <button
                 onClick={() => {
                   setTheme(e.theme);
+                  toggleMenu()
                 }}
-                className="mx-1 md:mx-2 xl:mx-3 text-white"
+                className="mx-1 md:mx-2 xl:mx-3 p-[25px] text-xl border-b  border-white text-white"
                 key={i}
               >
                 {e.name}
               </button>
             );
-          })}
+          })
+          }
+            </ul>
         </div>
-      </div>
+
       <div className="w-4/5 md:w-3/5 xl:w-4/12 mx-auto my-40 flex rounded items-center pt-2 flex-wrap">
         <div className="border-b basis-full py-2 px-2 flex justify-center items-center text-sm">
           <span className="basis-[30%] text-center mr-5">국내 / 국외 선택</span>
@@ -704,7 +744,7 @@ function App() {
         {/* {tcode}{tname} */}
         <div className="basis-full">
           <select
-            className="w-full border mt-4 py-2 px-4 rounded-md"
+            className="w-full border mt-4 py-2 px-4 rounded-md "
             value={tcode} onChange={(e)=>{
               const result_code = e.target.value;
               setTcode(e.target.value);
@@ -742,7 +782,8 @@ function App() {
             조회하기
           </button>
         </div>
-        {error && (
+        {
+        error && (
           <div className="basis-full text-center py-4 border-b">
             <span className={`${themeColor[theme].text} font-bold`}>
               {error}
@@ -783,15 +824,13 @@ function App() {
               infoTracking && infoTracking.trackingDetails.slice().reverse().map((e,i)=>{
                 return(
                 <div className={`pl-20 py-5 relative group ${themeColor[theme].odd}`} key={i}>
-                  <div className={`${ i === 0 ? `${themeColor[theme].back} ${themeColor[theme].border}` : 'bg-white'}
+                  <div className={`${ i === 0 ? `${themeColor[theme].back} ${themeColor[theme].border}` : 'bg-black'}
                    bg-white relative border-2 rounded-full w-2 h-2 -left-[30px] top-10 z-30`}></div>
-
                   <p>{e.where}</p>
                   <p>{e.telno}</p>
                   <p>{e.timeString}</p>
                   <div className={`group-last:h-0 h-full absolute w-0.5 left-[53px] top-[60px] z-20 ${themeColor[theme].back}`}></div>
                 </div>
-                
                 )
               })
             }
