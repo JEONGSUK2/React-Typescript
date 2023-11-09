@@ -673,7 +673,7 @@ function App() {
                 onClick={() => {
                   setTheme(e.theme);
                 }}
-                className="mx-1 md:mx-2 xl:mx-3 text-white"
+                className="mx-1 md:mx-2 xl:mx-4 text-white"
                 key={i}
               >
                 {e.name}
